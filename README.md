@@ -1,8 +1,6 @@
-# Job-Ready dbt + Databricks E-Commerce Project [2026]
+# E-Commerce-Analytics-Data-Engineering-using-dbt-Databricks
 
 End-to-end data pipeline for an e-commerce analytics layer: **orders**, **customers**, **products**, and **order line items**. Built with dbt on Databricks so you can run it locally or deploy via CI/CD.
-
-## What you get
 
 **Medallion architecture** (no prefix/postfix on schema names):
 
@@ -10,7 +8,7 @@ End-to-end data pipeline for an e-commerce analytics layer: **orders**, **custom
 - **Silver** (`silver` schema): Staging views for orders, order_items, products (1:1 with raw) + intermediate views. Customers have no staging—only `scd_customers` (snapshot from raw) in gold.
 - **Gold** (`gold` schema): Marts — `fct_orders`, `fct_order_items`, `dim_products`; **`scd_customers`** (Type 2 SCD — the only customer table, attributes only, no order-derived fields); and **exposures** (who uses the data).
 
-**Concepts included (beginner-friendly):**
+**Concepts worked on:**
 - **Incremental models**: `fct_orders` and `fct_order_items` use `merge` so only new/changed data is processed each run.
 - **Slowly changing dimension (Type 2)**: `scd_customers` snapshot tracks customer history; use `dbt_valid_from` / `dbt_valid_to` for point-in-time queries.
 - **Exposures**: Link gold models to dashboards and consumers (CEO dashboard, product analytics).
@@ -140,8 +138,6 @@ If you add a workflow (e.g. `.github/workflows/dbt.yml`) that runs dbt on PRs, u
 
 
 
-**Production tip:** When raw data comes from a lake or warehouse instead of seeds, define **sources** in YAML and set **source freshness** so dbt can alert when data stops landing.
-
 ## Databricks workflow (DAB + native dbt task)
 
 The pipeline is defined as a **Databricks Asset Bundle** so job and resources deploy from the repo.
@@ -157,5 +153,3 @@ databricks bundle run dbtXdatabricks_shopflow -t dev   # or -t prod
 ```
 
 Legacy **`databricks/job_dbt_pipeline.json`** is kept for reference; the canonical definition is the bundle in `resources/`.
-
-
