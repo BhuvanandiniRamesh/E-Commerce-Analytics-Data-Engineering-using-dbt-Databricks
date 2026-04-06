@@ -138,17 +138,7 @@ If you add a workflow (e.g. `.github/workflows/dbt.yml`) that runs dbt on PRs, u
 | `DBT_SCHEMA`           | Schema for CI runs       |
 | `DATABRICKS_CATALOG`   | Unity Catalog name       |
 
-## Interview talking points
 
-When asked *"Walk me through a data project you've built"* or *"What's in your dbt project?"*, you can say:
-
-- **Architecture:** "I built a medallion pipeline on Databricks: bronze for raw data, silver for staging and intermediate models, gold for fact and dimension tables. Schema names are clean—no prefix or postfix."
-- **Facts & dimensions:** "Gold has two fact tables—`fct_orders` (order grain) and `fct_order_items` (line grain)—and one dimension, `dim_products`. Customers are in `scd_customers` only (Type 2 SCD, attributes only, no order aggregates)."
-- **Scale & history:** "The fact tables are incremental with merge so we only process new data. Customer changes are tracked in `scd_customers` for point-in-time reporting."
-- **Quality & impact:** "I added generic tests (unique, not_null, relationships, accepted_values) and singular tests for business rules. Exposures link gold models to dashboards so we can see downstream impact."
-- **Deployment:** "The pipeline runs in CI on every push via GitHub Actions against Databricks, and can be scheduled with Databricks Jobs for production."
-
-See **[docs/GOLD_LAYER_QUESTIONS.md](docs/GOLD_LAYER_QUESTIONS.md)** for the dimensional model and 30+ business questions answerable from the gold layer.
 
 **Production tip:** When raw data comes from a lake or warehouse instead of seeds, define **sources** in YAML and set **source freshness** so dbt can alert when data stops landing.
 
@@ -168,6 +158,4 @@ databricks bundle run dbtXdatabricks_shopflow -t dev   # or -t prod
 
 Legacy **`databricks/job_dbt_pipeline.json`** is kept for reference; the canonical definition is the bundle in `resources/`.
 
-## License
 
-See [LICENSE](LICENSE).
